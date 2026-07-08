@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,69 +7,384 @@
 <title>Mariam Tamer Mohamed</title>
 
 <style>
+*{box-sizing:border-box;}
+
 body{
     margin:0;
     font-family:Arial,sans-serif;
     background:#fdf4f8;
+    overflow-x:hidden;
+}
+
+/* ===== Loading Screen ===== */
+#loading-screen{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:linear-gradient(135deg,#fdf1ee,#fbe8e5,#fdf1ee);
+    background-size:200% 200%;
+    animation:bgShift 6s ease infinite;
     display:flex;
+    flex-direction:column;
     justify-content:center;
     align-items:center;
-    height:100vh;
+    z-index:9999;
+    text-align:center;
+    padding:20px;
+    overflow:hidden;
+}
+
+@keyframes bgShift{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+.floaty{
+    position:absolute;
+    opacity:0.6;
+    pointer-events:none;
+    animation:floatUp linear infinite;
+}
+
+@keyframes floatUp{
+    0%{ transform:translateY(110vh) rotate(0deg); opacity:0; }
+    10%{ opacity:0.7; }
+    90%{ opacity:0.5; }
+    100%{ transform:translateY(-10vh) rotate(360deg); opacity:0; }
+}
+
+.logo-circle{
+    width:220px;
+    height:220px;
+    border-radius:50%;
+    border:3px solid #e5a6ac;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    background:#fdf1ee;
+    position:relative;
+    margin-bottom:20px;
+    animation:popIn 1s ease, breathe 3s ease-in-out infinite 1s;
+    box-shadow:0 0 0 0 rgba(229,135,143,0.6);
+}
+
+@keyframes popIn{
+    0%{ transform:scale(0.3); opacity:0; }
+    60%{ transform:scale(1.08); opacity:1; }
+    100%{ transform:scale(1); opacity:1; }
+}
+
+@keyframes breathe{
+    0%,100%{ box-shadow:0 0 0 0 rgba(229,135,143,0.45); }
+    50%{ box-shadow:0 0 0 18px rgba(229,135,143,0); }
+}
+
+.logo-circle .heart-icon{
+    font-size:26px;
+    color:#e5878f;
+    margin-bottom:5px;
+    animation:heartBeat 1.4s ease-in-out infinite;
+}
+
+@keyframes heartBeat{
+    0%,100%{ transform:scale(1); }
+    25%{ transform:scale(1.25); }
+    50%{ transform:scale(1); }
+}
+
+.logo-circle .yarn{
+    font-size:55px;
+    margin-bottom:5px;
+    display:inline-block;
+    animation:spinYarn 4s linear infinite;
+}
+
+@keyframes spinYarn{
+    0%{ transform:rotate(0deg); }
+    100%{ transform:rotate(360deg); }
+}
+
+.logo-circle .brand-name{
+    font-family:'Brush Script MT', cursive;
+    font-size:34px;
+    color:#5a3d34;
+    line-height:1;
+}
+
+.logo-circle .brand-sub{
+    font-size:15px;
+    letter-spacing:3px;
+    color:#e5878f;
+    font-weight:bold;
+    margin-top:2px;
+}
+
+.tagline{
+    color:#5a3d34;
+    font-size:16px;
+    margin:15px 0 30px 0;
+    opacity:0;
+    animation:fadeUp 0.8s ease forwards 0.6s;
+}
+
+@keyframes fadeUp{
+    from{ opacity:0; transform:translateY(15px); }
+    to{ opacity:1; transform:translateY(0); }
+}
+
+.mini-yarn{
+    font-size:22px;
+    margin-bottom:10px;
+    display:inline-block;
+    animation:bounce 1s ease-in-out infinite;
+}
+
+@keyframes bounce{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(-8px); }
+}
+
+.loading-text{
+    color:#5a3d34;
+    font-size:20px;
+    margin-bottom:10px;
+}
+
+.loading-text::after{
+    content:'...';
+    animation:dots 1.4s steps(4,end) infinite;
+}
+
+@keyframes dots{
+    0%,20%{ content:''; }
+    40%{ content:'.'; }
+    60%{ content:'..'; }
+    80%,100%{ content:'...'; }
+}
+
+.progress-bar-bg{
+    width:260px;
+    height:14px;
+    background:#f3d9d4;
+    border-radius:10px;
+    overflow:hidden;
+    margin-bottom:10px;
+    box-shadow:inset 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.progress-bar-fill{
+    height:100%;
+    width:0%;
+    background:repeating-linear-gradient(
+        45deg,
+        #e5878f,
+        #e5878f 8px,
+        #ec9ba1 8px,
+        #ec9ba1 16px
+    );
+    background-size:200% 100%;
+    border-radius:10px;
+    animation:loadProgress 5s linear forwards, stripeMove 1s linear infinite;
+}
+
+@keyframes loadProgress{
+    from{ width:0%; }
+    to{ width:100%; }
+}
+
+@keyframes stripeMove{
+    from{ background-position:0 0; }
+    to{ background-position:40px 0; }
+}
+
+.please-wait{
+    color:#8a6a5f;
+    font-size:14px;
+    opacity:0;
+    animation:fadeUp 0.8s ease forwards 1s;
+}
+
+/* ===== Main Content (Creative Redesign) ===== */
+#main-content{
+    display:none;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    background:radial-gradient(circle at 30% 20%, #fdf1ee, #fbe0dc 70%);
+    position:relative;
+    overflow:hidden;
+    padding:30px 15px;
+}
+
+#main-content .bg-decor{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+}
+
+#main-content .bg-decor span{
+    position:absolute;
+    opacity:0.35;
+    animation:driftSlow 8s ease-in-out infinite;
+}
+
+@keyframes driftSlow{
+    0%,100%{ transform:translateY(0) rotate(0deg); }
+    50%{ transform:translateY(-12px) rotate(8deg); }
 }
 
 .card{
-    width:350px;
-    background:#fff;
-    border-radius:20px;
-    padding:30px;
+    width:360px;
+    max-width:100%;
+    background:#fffdfb;
+    border-radius:28px;
+    padding:0 0 30px 0;
     text-align:center;
-    box-shadow:0 10px 30px rgba(0,0,0,.2);
+    box-shadow:0 20px 45px rgba(160,90,95,0.25);
+    position:relative;
+    z-index:1;
+    overflow:hidden;
+    animation:cardIn 0.8s cubic-bezier(.2,.8,.3,1.15);
+    border:1px solid #f2d3d0;
+}
+
+@keyframes cardIn{
+    from{ opacity:0; transform:translateY(40px) scale(0.9); }
+    to{ opacity:1; transform:translateY(0) scale(1); }
+}
+
+.card-header{
+    background:linear-gradient(135deg,#f6c6cb,#eda3ab);
+    padding:35px 20px 55px 20px;
+    position:relative;
+}
+
+.card-header::after{
+    content:'';
+    position:absolute;
+    bottom:-1px;
+    left:0;
+    width:100%;
+    height:40px;
+    background:#fffdfb;
+    border-radius:50% 50% 0 0 / 100% 100% 0 0;
+}
+
+.avatar-ring{
+    width:100px;
+    height:100px;
+    margin:0 auto;
+    border-radius:50%;
+    background:#fffdfb;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:46px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.15);
+    position:relative;
+    z-index:2;
+    animation:avatarPop 0.9s ease 0.2s both, avatarFloat 3s ease-in-out infinite 1.1s;
+}
+
+@keyframes avatarPop{
+    from{ transform:scale(0); }
+    to{ transform:scale(1); }
+}
+
+@keyframes avatarFloat{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(-6px); }
 }
 
 h1{
-    color:#d63384;
-}
-
-p{
-    color:#555;
-}
-
-.btn{
-    display:block;
-    margin:15px 0;
-    padding:15px;
-    text-decoration:none;
-    color:white;
-    border-radius:12px;
-    font-size:18px;
+    color:#6b3f38;
+    font-size:24px;
+    margin:20px 0 4px 0;
+    opacity:0;
+    animation:fadeUp 0.7s ease forwards 0.4s;
 }
 
 .welcome{
-    font-size:18px;
-    color:#666;
-    margin-bottom:20px;
+    font-size:15px;
+    color:#8a6a5f;
+    margin:0 0 25px 0;
+    opacity:0;
+    animation:fadeUp 0.7s ease forwards 0.55s;
 }
 
 .welcome span{
     color:#d63384;
     font-weight:bold;
-    font-size:22px;
+    font-size:16px;
+}
+
+.btn-group{
+    padding:0 25px;
+}
+
+.btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin:14px 0;
+    padding:15px;
+    text-decoration:none;
+    color:white;
+    border-radius:14px;
+    font-size:17px;
+    font-weight:bold;
+    box-shadow:0 8px 18px rgba(0,0,0,0.12);
+    transition:transform 0.2s ease, box-shadow 0.2s ease;
+    opacity:0;
+    animation:fadeUp 0.7s ease forwards;
+}
+
+.btn:nth-of-type(1){ animation-delay:0.7s; }
+.btn:nth-of-type(2){ animation-delay:0.85s; }
+
+.btn:active{
+    transform:scale(0.96);
 }
 
 .whatsapp{
-    background:#25D366;
+    background:linear-gradient(135deg,#2fdb75,#1cb85c);
 }
 
 .insta{
-    background:#E1306C;
+    background:linear-gradient(135deg,#f58529,#dd2a7b,#8134af,#515bd4);
+    background-size:300% 300%;
+    animation:fadeUp 0.7s ease forwards 0.85s, instaGradient 5s ease infinite;
+}
+
+@keyframes instaGradient{
+    0%{ background-position:0% 50%; }
+    50%{ background-position:100% 50%; }
+    100%{ background-position:0% 50%; }
 }
 
 .gallery{
-    margin-top:25px;
-    padding:20px;
-    border:2px dashed #ccc;
-    border-radius:12px;
-    color:#777;
+    margin:25px 25px 0 25px;
+    padding:25px 15px;
+    border:2px dashed #e5b8b0;
+    border-radius:16px;
+    color:#a3847a;
+    font-size:14px;
+    opacity:0;
+    animation:fadeUp 0.7s ease forwards 1s;
+    background:#fdf6f4;
+}
+
+.gallery-icon{
+    font-size:26px;
+    display:block;
+    margin-bottom:8px;
+    animation:bounce 2s ease-in-out infinite;
 }
 </style>
 
@@ -76,29 +392,97 @@ p{
 
 <body>
 
-<div class="card">
+<!-- Loading Screen -->
+<div id="loading-screen">
+    <div class="logo-circle">
+        <div class="heart-icon">♥</div>
+        <div class="yarn">🧶</div>
+        <div class="brand-name">Mimo</div>
+        <div class="brand-sub">CRAFTS</div>
+    </div>
 
-<h1>Mariam Tamer Mohamed</h1>
+    <p class="tagline">♥ Crochet Bags &amp; Handmade Creations ♥</p>
 
-<p class="welcome">
-    Welcome to <span>Mimo Crafts</span> ✨
-</p>
+    <div class="mini-yarn">🧶</div>
+    <div class="loading-text">Loading</div>
 
-<a class="btn whatsapp" href="https://wa.me/201113199992" target="_blank">
-💬 WhatsApp
-</a>
+    <div class="progress-bar-bg">
+        <div class="progress-bar-fill"></div>
+    </div>
 
-<a class="btn insta"
-href="https://www.instagram.com/mim_ocrafts?igsh=MXB4cXg4anJmbXczZA=="
-target="_blank">
-📷 Instagram
-</a>
-
-<div class="gallery">
-🖼️ Photos will be added soon...
+    <p class="please-wait">Please wait a moment ♥</p>
 </div>
 
+<!-- Main Content -->
+<div id="main-content">
+    <div class="bg-decor" id="bgDecor"></div>
+
+    <div class="card">
+        <div class="card-header">
+            <div class="avatar-ring">🧶</div>
+        </div>
+
+        <h1>Mariam Tamer Mohamed</h1>
+
+        <p class="welcome">
+            Welcome to <span>Mimo Crafts</span> ✨
+        </p>
+
+        <div class="btn-group">
+            <a class="btn whatsapp" href="https://wa.me/201113199992" target="_blank">
+            💬 WhatsApp
+            </a>
+
+            <a class="btn insta"
+            href="https://www.instagram.com/mim_ocrafts?igsh=MXB4cXg4anJmbXczZA=="
+            target="_blank">
+            📷 Instagram
+            </a>
+        </div>
+
+        <div class="gallery">
+            <span class="gallery-icon">🖼️</span>
+            Photos will be added soon...
+        </div>
+    </div>
 </div>
+
+<script>
+// floating hearts/sparkles for loading screen
+const loadingScreen = document.getElementById('loading-screen');
+const symbols = ['♥','✦','🧶','✧'];
+for(let i=0;i<18;i++){
+    const el = document.createElement('div');
+    el.className = 'floaty';
+    el.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+    el.style.left = Math.random()*100 + '%';
+    el.style.fontSize = (14 + Math.random()*20) + 'px';
+    el.style.color = Math.random() > 0.5 ? '#e5878f' : '#d9b48f';
+    el.style.animationDuration = (4 + Math.random()*4) + 's';
+    el.style.animationDelay = (Math.random()*5) + 's';
+    loadingScreen.appendChild(el);
+}
+
+// decorative background icons for main content
+const bgDecor = document.getElementById('bgDecor');
+const decorSymbols = ['♥','🧶','✦'];
+for(let i=0;i<10;i++){
+    const el = document.createElement('span');
+    el.textContent = decorSymbols[Math.floor(Math.random()*decorSymbols.length)];
+    el.style.left = Math.random()*100 + '%';
+    el.style.top = Math.random()*100 + '%';
+    el.style.fontSize = (18 + Math.random()*22) + 'px';
+    el.style.color = '#e5878f';
+    el.style.animationDelay = (Math.random()*4) + 's';
+    el.style.animationDuration = (5 + Math.random()*4) + 's';
+    bgDecor.appendChild(el);
+}
+
+setTimeout(function(){
+    document.getElementById('loading-screen').style.display = 'none';
+    document.getElementById('main-content').style.display = 'flex';
+}, 3000);
+</script>
 
 </body>
 </html>
